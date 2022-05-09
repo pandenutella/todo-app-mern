@@ -8,6 +8,7 @@ const TodoGroup = ({ group, onItemAdd }) => {
   return (
     <Card title={group.name}>
       <List
+        itemLayout="horizontal"
         dataSource={group.items}
         renderItem={(item) => <TodoItem item={item} />}
         footer={<NewTodoItem group={group} onAdd={handleItemAdd} />}

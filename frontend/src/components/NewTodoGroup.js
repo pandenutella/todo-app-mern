@@ -21,7 +21,7 @@ const NewTodoGroup = ({ onCreate }) => {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/groups`, { name })
       .then(({ data }) => {
-        onCreate(data);
+        onCreate({ ...data, items: [] });
         setVisible(false);
         form.resetFields();
       })
