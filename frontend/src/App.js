@@ -8,8 +8,8 @@ const App = () => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const getGroups = axios.get("http://localhost:5000/api/groups");
-    const getItems = axios.get("http://localhost:5000/api/items");
+    const getGroups = axios.get(`${process.env.REACT_APP_BACKEND_URL}/groups`);
+    const getItems = axios.get(`${process.env.REACT_APP_BACKEND_URL}/items`);
 
     Promise.all([getGroups, getItems]).then((responses) => {
       const [getGroupsResponse, getItemsResponse] = responses;
