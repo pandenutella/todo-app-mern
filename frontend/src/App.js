@@ -1,46 +1,29 @@
 import { Col, Row } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import AppLayout from "./components/AppLayout";
 import TodoGroup from "./components/TodoGroup";
 
 const App = () => {
-  const groups = [
-    {
-      _id: "1",
-      name: "A Group",
-      items: [
-        {
-          _id: "1",
-          title: "An Item",
-          description: "This is a todo item",
-          completed: false,
-        },
-        {
-          _id: "2",
-          title: "Another Item",
-          description: "This is another todo item",
-          completed: true,
-        },
-      ],
-    },
-    {
-      _id: "2",
-      name: "Another Group",
-      items: [
-        {
-          _id: "1",
-          title: "An Item",
-          description: "This is a todo item",
-          completed: true,
-        },
-        {
-          _id: "2",
-          title: "Another Item",
-          description: "This is another todo item",
-          completed: false,
-        },
-      ],
-    },
-  ];
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const getGroups = axios.get("http://localhost:5000/api/groups");
+    const getItems = axios.get("http://localhost:5000/api/items");
+
+    Promise.all([getGroups, getItems]).then((responses) => {
+      const [getGroupsResponse, getItemsResponse] = responses;
+      const groups = getGroupsResponse.data;
+      const items = getItemsResponse.data;
+
+      setGroups(
+        groups.map((group) => ({
+          ...group,
+          items: items.filter((item) => item.group === group._id),
+        }))
+      );
+    });
+  }, []);
 
   return (
     <AppLayout>
