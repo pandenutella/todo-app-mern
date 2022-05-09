@@ -10,8 +10,8 @@ const TodoGroup = ({ group, onItemAdd }) => {
       <List
         dataSource={group.items}
         renderItem={(item) => <TodoItem item={item} />}
+        footer={<NewTodoItem group={group} onAdd={handleItemAdd} />}
       />
-      <NewTodoItem group={group} onAdd={handleItemAdd} />
     </Card>
   );
 };

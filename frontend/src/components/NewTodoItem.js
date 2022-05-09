@@ -1,27 +1,34 @@
-import { Button, Form } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import NewTodoItemModal from "./NewTodoItemModal";
 
 const NewTodoItem = ({ group, onAdd }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [adding, setAdding] = useState(false);
   const [form] = Form.useForm();
 
-  const handleClick = () => setModalVisible(true);
+  const handleOk = () => form.submit();
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
-  const handleAdd = (item) => {
+  const handleClick = () => setVisible(true);
+
+  const handleFinish = (values) => {
     setAdding(true);
 
+    const item = {
+      title: values.title,
+      description: values.description ? values.description : null,
+      group: group._id,
+      completed: false,
+    };
+
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/items`, {
-        ...item,
-        group: group._id,
-        completed: false,
-      })
-      .then((response) => {
-        onAdd(response.data);
-        setModalVisible(false);
+      .post(`${process.env.REACT_APP_BACKEND_URL}/items`, item)
+      .then(({ data }) => {
+        onAdd(data);
+        setVisible(false);
         form.resetFields();
       })
       .finally(() => setAdding(false));
@@ -32,13 +39,22 @@ const NewTodoItem = ({ group, onAdd }) => {
       <Button type="dashed" block onClick={handleClick}>
         New Item
       </Button>
-      <NewTodoItemModal
-        form={form}
-        adding={adding}
-        visible={modalVisible}
-        onVisibleChange={setModalVisible}
-        onItemAdd={handleAdd}
-      />
+      <Modal
+        title="New Item"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okButtonProps={{ loading: adding }}
+      >
+        <Form form={form} layout="vertical" onFinish={handleFinish}>
+          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };
