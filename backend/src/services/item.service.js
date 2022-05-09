@@ -29,3 +29,19 @@ export const createItem = (req, res) => {
     res.json(data);
   });
 };
+
+export const updateItemProperties = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+
+    for (const property in req.body) item[property] = req.body[property];
+    const savedItem = await item.save();
+
+    res.json(savedItem);
+  } catch (error) {
+    const message = "Item not found!";
+
+    res.status(404).json({ message });
+    throw new Error(message);
+  }
+};

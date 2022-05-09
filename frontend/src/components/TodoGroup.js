@@ -2,7 +2,7 @@ import { Card, List } from "antd";
 import NewTodoItem from "./NewTodoItem";
 import TodoItem from "./TodoItem";
 
-const TodoGroup = ({ group, onItemAdd }) => {
+const TodoGroup = ({ group, onItemAdd, onItemUpdate }) => {
   const handleItemAdd = (item) => onItemAdd(item);
 
   return (
@@ -10,7 +10,7 @@ const TodoGroup = ({ group, onItemAdd }) => {
       <List
         itemLayout="horizontal"
         dataSource={group.items}
-        renderItem={(item) => <TodoItem item={item} />}
+        renderItem={(item) => <TodoItem item={item} onUpdate={onItemUpdate} />}
         footer={<NewTodoItem group={group} onAdd={handleItemAdd} />}
       />
     </Card>

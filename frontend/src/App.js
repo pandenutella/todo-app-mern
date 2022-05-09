@@ -46,12 +46,29 @@ const App = () => {
     );
   };
 
+  const handleItemUpdate = (item) => {
+    setGroups((groups) =>
+      groups.map((group) => {
+        if (group._id !== item.group) return group;
+
+        return {
+          ...group,
+          items: group.items.map((i) => (i._id !== item._id ? i : item)),
+        };
+      })
+    );
+  };
+
   return (
     <AppLayout>
       <Row gutter={[20, 20]}>
         {groups.map((group) => (
           <Col key={group._id} {...columnWidth}>
-            <TodoGroup group={group} onItemAdd={handleItemAdd} />
+            <TodoGroup
+              group={group}
+              onItemAdd={handleItemAdd}
+              onItemUpdate={handleItemUpdate}
+            />
           </Col>
         ))}
         <Col {...columnWidth}>
