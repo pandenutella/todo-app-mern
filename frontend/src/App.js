@@ -59,6 +59,19 @@ const App = () => {
     );
   };
 
+  const handleItemDelete = (item) => {
+    setGroups((groups) =>
+      groups.map((group) => {
+        if (group._id !== item.group) return group;
+
+        return {
+          ...group,
+          items: group.items.filter((i) => i._id !== item._id),
+        };
+      })
+    );
+  };
+
   return (
     <AppLayout>
       <Row gutter={[20, 20]}>
@@ -68,6 +81,7 @@ const App = () => {
               group={group}
               onItemAdd={handleItemAdd}
               onItemUpdate={handleItemUpdate}
+              onItemDelete={handleItemDelete}
             />
           </Col>
         ))}

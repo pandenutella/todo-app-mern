@@ -45,3 +45,16 @@ export const updateItemProperties = async (req, res) => {
     throw new Error(message);
   }
 };
+
+export const deleteItem = async (req, res) => {
+  try {
+    await Item.deleteOne({ _id: req.params.id });
+
+    res.json({});
+  } catch (error) {
+    const message = "Item not found!";
+
+    res.status(404).json({ message });
+    throw new Error(message);
+  }
+};
