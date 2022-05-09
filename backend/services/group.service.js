@@ -1,17 +1,18 @@
-import Group from "../models/group.model";
+import Group from "../models/group.model.js";
 
 export const getGroups = (_, res) => {
-  Group.find({}).then(({ data }) => res.json(data));
+  Group.find({}).then((groups) => res.json(groups));
 };
 
 export const getGroupById = (req, res) => {
-  Group.findById(req.params.id).then(({ data }) => {
-    if (!data) {
-      res.status(404).json({ message: "Group not found!" });
+  Group.findById(req.params.id).then((group) => {
+    if (!group) {
+      const message = "Group not found!";
 
-      throw new Error("Group not found!");
+      res.status(404).json({ message });
+      throw new Error(message);
     }
 
-    res.json(data);
+    res.json(group);
   });
 };

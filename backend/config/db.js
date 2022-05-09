@@ -1,13 +1,13 @@
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-export const initializeConnection = () => {
-  const name = "todo_app";
+dotenv.config();
 
+export const initializeConnection = () => {
   mongoose
-    .connect(`mongodb://localhost:27017/${name}`, {
+    .connect(`mongodb://localhost:27017/${process.env.DATABASE_NAME}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true,
     })
     .then((client) => console.log(client.connection.host))
     .catch((error) => {
