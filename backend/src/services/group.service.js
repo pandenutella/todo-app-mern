@@ -30,3 +30,16 @@ export const getGroupByIdWithItems = async (req, res) => {
   const items = await Item.find({ groupId: group.id });
   res.json({ ...group._doc, items });
 };
+
+export const createGroup = (req, res) => {
+  Group.create(req.body, (err, data) => {
+    if (err) {
+      const message = "Failed to create group!";
+
+      res.status(400).json({ message });
+      throw new Error(message);
+    }
+
+    res.json(data);
+  });
+};

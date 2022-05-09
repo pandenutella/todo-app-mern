@@ -2,7 +2,15 @@ import { Col, Row } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import AppLayout from "./components/AppLayout";
+import NewTodoGroup from "./components/NewTodoGroup";
 import TodoGroup from "./components/TodoGroup";
+
+const columnWidth = {
+  xs: 24,
+  sm: 12,
+  xl: 8,
+  xxl: 6,
+};
 
 const App = () => {
   const [groups, setGroups] = useState([]);
@@ -25,14 +33,20 @@ const App = () => {
     });
   }, []);
 
+  const handleGroupCreate = (group) =>
+    setGroups((groups) => [...groups, group]);
+
   return (
     <AppLayout>
       <Row gutter={[20, 20]}>
         {groups.map((group) => (
-          <Col key={group._id} xs={24} sm={12} xl={8} xxl={6}>
+          <Col key={group._id} {...columnWidth}>
             <TodoGroup group={group} />
           </Col>
         ))}
+        <Col {...columnWidth}>
+          <NewTodoGroup onCreate={handleGroupCreate} />
+        </Col>
       </Row>
     </AppLayout>
   );
