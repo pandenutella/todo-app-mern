@@ -1,4 +1,5 @@
 import Group from "../models/group.model.js";
+import Item from "../models/item.model.js";
 
 export const getGroups = (_, res) => {
   Group.find({}).then((groups) => res.json(groups));
@@ -15,4 +16,17 @@ export const getGroupById = (req, res) => {
 
     res.json(group);
   });
+};
+
+export const getGroupByIdWithItems = async (req, res) => {
+  const group = await Group.findById(req.params.id);
+  if (!group) {
+    const message = "Group not found!";
+
+    res.status(404).json({ message });
+    throw new Error(message);
+  }
+
+  const items = await Item.find({ groupId: group.id });
+  res.json({ ...group._doc, items });
 };

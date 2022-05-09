@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import Group from "./group.model";
+
+const { Schema } = mongoose;
 
 const itemSchema = mongoose.Schema(
   {
     group: {
-      type: Group.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Group",
     },
     title: {

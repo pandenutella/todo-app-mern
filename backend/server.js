@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { initializeConnection } from "./config/db.js";
 import groupController from "./controllers/group.controller.js";
+import itemController from "./controllers/item.controller.js";
 
 initializeConnection();
 dotenv.config();
@@ -9,6 +10,7 @@ dotenv.config();
 const app = express();
 
 app.use("/api/groups", groupController);
+app.use("/api/items", itemController);
 
 const PORT = process.env.PORT || 5000;
 
