@@ -36,6 +36,9 @@ const App = () => {
   const handleGroupCreate = (group) =>
     setGroups((groups) => [...groups, group]);
 
+  const handleGroupDelete = (id) =>
+    setGroups((groups) => groups.filter((group) => group._id !== id));
+
   const handleItemAdd = (item) => {
     setGroups((groups) =>
       groups.map((group) => {
@@ -79,6 +82,7 @@ const App = () => {
           <Col key={group._id} {...columnWidth}>
             <TodoGroup
               group={group}
+              onDelete={handleGroupDelete}
               onItemAdd={handleItemAdd}
               onItemUpdate={handleItemUpdate}
               onItemDelete={handleItemDelete}

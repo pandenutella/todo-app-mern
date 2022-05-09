@@ -43,3 +43,16 @@ export const createGroup = (req, res) => {
     res.json(data);
   });
 };
+
+export const deleteGroup = async (req, res) => {
+  try {
+    await Group.deleteOne({ id: req.params.id });
+  } catch (_) {
+    const message = "Failed to delete group!";
+
+    res.status(400).json({ message });
+    throw new Error(message);
+  }
+
+  res.status(200).json({});
+};
