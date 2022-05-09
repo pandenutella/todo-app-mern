@@ -16,3 +16,16 @@ export const getItemById = (req, res) => {
     res.json(item);
   });
 };
+
+export const createItem = (req, res) => {
+  Item.create(req.body, (err, data) => {
+    if (err) {
+      const message = "Failed to create item!";
+
+      res.status(400).json({ message });
+      throw new Error(message);
+    }
+
+    res.json(data);
+  });
+};
