@@ -1,40 +1,53 @@
-import { Button, Card, Col, Input, Row } from "antd";
+import { Button, Card, Form, Input, Modal } from "antd";
 import axios from "axios";
 import { useState } from "react";
 
 const NewTodoGroup = ({ onCreate }) => {
-  const [name, setName] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [form] = Form.useForm();
 
-  const handleChange = ({ target }) => setName(target.value);
-
-  const handleCreate = () => {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/groups`, { name })
-      .then((response) => {
-        onCreate(response.data);
-
-        setName("");
-      });
+  const handleNewGroupClick = () => setVisible(true);
+  const handleOk = () => form.submit();
+  const handleCancel = () => {
+    setVisible(false);
+    form.resetFields();
   };
 
-  const renderTitle = () => (
-    <Row gutter={[20, 20]}>
-      <Col flex="auto">
-        <Input
-          placeholder="New Group Name"
-          value={name}
-          onChange={handleChange}
-        />
-      </Col>
-      <Col flex="73px">
-        <Button type="primary" onClick={handleCreate}>
-          Create
-        </Button>
-      </Col>
-    </Row>
-  );
+  const handleFinish = (values) => {
+    setAdding(true);
+    const { name } = values;
 
-  return <Card title={renderTitle()} />;
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/groups`, { name })
+      .then(({ data }) => {
+        onCreate(data);
+        setVisible(false);
+        form.resetFields();
+      })
+      .finally(() => setAdding(false));
+  };
+
+  return (
+    <Card>
+      <Button type="dashed" block onClick={handleNewGroupClick}>
+        New Group
+      </Button>
+      <Modal
+        title="New Group"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okButtonProps={{ loading: adding }}
+      >
+        <Form form={form} layout="vertical" onFinish={handleFinish}>
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </Card>
+  );
 };
 
 export default NewTodoGroup;
